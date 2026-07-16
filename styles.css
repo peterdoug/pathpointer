@@ -35,17 +35,14 @@ h1 { margin: 0; font-size: clamp(28px, 8vw, 35px); line-height: 1.05; letter-spa
 .local-track-path { fill: none; stroke: rgba(247,251,248,0.48); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .accuracy-circle { fill: rgba(88,166,255,0.08); stroke: rgba(88,166,255,0.17); stroke-width: 1; }
 .nearest-marker { fill: var(--orange); stroke: #fff6e8; stroke-width: 2; filter: drop-shadow(0 2px 5px rgba(255,159,47,0.45)); }
-.location-halo { fill: rgba(88,166,255,0.2); stroke: rgba(164,210,255,0.35); stroke-width: 1; }
-.location-dot { fill: var(--blue); stroke: #ffffff; stroke-width: 2.5; filter: drop-shadow(0 2px 5px rgba(38,119,214,0.55)); }
 .ticks { position: absolute; z-index: 2; inset: 9px; border-radius: 50%; background: repeating-conic-gradient(from -1deg, rgba(255,255,255,0.3) 0deg 0.55deg, transparent 0.55deg 5deg); mask: radial-gradient(circle, transparent 0 88%, #000 88.4% 100%); -webkit-mask: radial-gradient(circle, transparent 0 88%, #000 88.4% 100%); opacity: 0.68; pointer-events: none; }
-.hub { display: none; }
-.needle { position: absolute; z-index: 3; left: calc(50% - 35px); top: calc(50% - 78px); width: 70px; height: 156px; opacity: 0.16; transform-origin: 50% 50%; transition: transform 320ms cubic-bezier(.2,.8,.2,1), opacity 250ms ease; }
-.needle.visible { opacity: 1; }
-.needle-tip { position: absolute; left: 2px; top: 0; width: 66px; height: 88px; clip-path: polygon(50% 0, 100% 100%, 50% 72%, 0 100%); background: linear-gradient(180deg, var(--gold), var(--orange)); filter: drop-shadow(0 7px 12px rgba(255,159,47,0.28)); }
-.needle-stem { position: absolute; left: 28px; top: 61px; width: 14px; height: 92px; border-radius: 0 0 7px 7px; background: linear-gradient(var(--orange), #b7501c); }
-.arrived { position: absolute; z-index: 4; inset: 0; display: grid; place-items: center; }
-.arrived::before { content: ""; width: 104px; height: 104px; border-radius: 50%; background: rgba(100,220,154,0.12); border: 1px solid rgba(100,220,154,0.2); }
-.arrived span { position: absolute; color: var(--green); font-size: 44px; font-weight: 800; }
+.needle { position: absolute; z-index: 3; left: calc(50% - 18px); top: calc(50% - 78px); width: 36px; height: 156px; opacity: 0.14; transform-origin: 50% 50%; transition: transform 320ms cubic-bezier(.2,.8,.2,1), opacity 250ms ease; }
+.needle.visible { opacity: 0.72; }
+.needle-tip { position: absolute; left: 1px; top: 0; width: 34px; height: 84px; clip-path: polygon(50% 0, 100% 100%, 50% 76%, 0 100%); background: linear-gradient(180deg, var(--gold), var(--orange)); filter: drop-shadow(0 6px 10px rgba(255,159,47,0.24)); }
+.needle-stem { position: absolute; left: 14px; top: 61px; width: 8px; height: 92px; border-radius: 0 0 4px 4px; background: linear-gradient(var(--orange), #b7501c); }
+.center-halo, .center-dot { position: absolute; left: 50%; top: 50%; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; }
+.center-halo { z-index: 4; width: 20px; height: 20px; background: rgba(88,166,255,0.22); border: 1px solid rgba(164,210,255,0.42); }
+.center-dot { z-index: 5; width: 12px; height: 12px; background: var(--blue); border: 2px solid #fff; box-shadow: 0 2px 6px rgba(38,119,214,0.62); }
 
 .readout { min-height: 80px; text-align: center; }
 .distance { margin: 0; font-size: clamp(45px, 14vw, 59px); line-height: 1; font-weight: 780; letter-spacing: -2.6px; font-variant-numeric: tabular-nums; }
