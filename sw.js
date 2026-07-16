@@ -1,4 +1,4 @@
-const CACHE = "pathpointer-v5";
+const CACHE = "pathpointer-v6";
 const CORE = ["./", "./index.html", "./styles.css", "./app.js", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", (event) => {
