@@ -68,6 +68,10 @@ h1 { margin: 0; font-size: clamp(28px, 8vw, 35px); line-height: 1.05; letter-spa
 .secondary-button { margin-top: 9px; color: var(--ink); background: rgba(255,255,255,0.075); border: 1px solid var(--line); }
 .folder-icon { position: relative; width: 18px; height: 13px; border: 1.8px solid currentColor; border-radius: 2px; }
 .folder-icon::before { content: ""; position: absolute; left: -1.8px; top: -5px; width: 8px; height: 5px; border: 1.8px solid currentColor; border-bottom: 0; border-radius: 2px 2px 0 0; }
+.max-deviation-card { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 11px; padding: 13px 15px; border: 1px solid rgba(88,166,255,0.16); border-radius: 14px; background: rgba(88,166,255,0.065); }
+.max-deviation-card[hidden] { display: none; }
+.max-deviation-label { color: #a9bfd5; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; }
+.max-deviation-card strong { font-size: 18px; font-variant-numeric: tabular-nums; }
 .error-card { display: flex; gap: 10px; align-items: flex-start; margin-top: 11px; padding: 12px 13px; border: 1px solid rgba(255,205,77,0.17); border-radius: 14px; color: #f8e7b8; background: rgba(255,187,51,0.075); }
 .error-card[hidden] { display: none; }
 .error-card > span { display: grid; place-items: center; flex: 0 0 19px; height: 19px; border-radius: 50%; color: #1b1507; background: #f5cb54; font-size: 12px; font-weight: 900; }
