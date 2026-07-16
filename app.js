@@ -16,7 +16,7 @@ const state = {
 
 const $ = (id) => document.getElementById(id);
 const elements = {
-  sensorDot: $("sensor-dot"), compass: $("compass"), needle: $("needle"), arrived: $("arrived"),
+  sensorDot: $("sensor-dot"), compass: $("compass"), needle: $("needle"),
   distance: $("distance"), readoutLabel: $("readout-label"), trackRow: $("track-row"),
   trackName: $("track-name"), trackDetail: $("track-detail"), fileInput: $("file-input"),
   fileButton: $("file-button"), fileButtonLabel: $("file-button-label"), compassButton: $("compass-button"),
@@ -155,7 +155,7 @@ function renderTrackView(nearest) {
   if (!ready) return;
 
   const accuracy = Number.isFinite(state.accuracy) ? state.accuracy : 0;
-  const viewRadiusMetres = Math.max(75, Math.min(20000, nearest.distance * 1.35 + 40, Math.max(nearest.distance * 1.35 + 40, accuracy * 2.5, 120)));
+  const viewRadiusMetres = Math.max(75, Math.min(20000, Math.max(nearest.distance * 1.35 + 40, accuracy * 2.5, 120)));
   const scale = TRACK_RADIUS / viewRadiusMetres;
   const heading = state.heading || 0;
 
@@ -193,9 +193,8 @@ function render() {
   const nearest = state.track && state.position ? nearestPointOnTrack(state.position, state.track.segments) : null;
   const isOnPath = Boolean(nearest && nearest.distance < 3);
   renderTrackView(nearest);
-  elements.needle.classList.toggle("visible", Boolean(nearest) && !isOnPath);
+  elements.needle.classList.toggle("visible", Boolean(nearest));
   elements.needle.style.transform = `rotate(${normalizeRotation((nearest ? nearest.bearing : 0) - (state.heading || 0))}deg)`;
-  elements.arrived.hidden = !isOnPath;
   elements.compass.setAttribute("aria-label", isOnPath ? "You are on the path" : "Compass pointing toward the path");
 
   elements.distance.classList.toggle("empty", !state.track || !state.position);
