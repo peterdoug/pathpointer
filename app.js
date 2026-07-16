@@ -1,6 +1,10 @@
 "use strict";
 
 const EARTH_RADIUS = 6371008.8;
+const SVG_NS = "http://www.w3.org/2000/svg";
+const TRACK_CENTER = 146;
+const TRACK_RADIUS = 122;
+
 const state = {
   track: null,
   position: null,
@@ -17,7 +21,8 @@ const elements = {
   trackName: $("track-name"), trackDetail: $("track-detail"), fileInput: $("file-input"),
   fileButton: $("file-button"), fileButtonLabel: $("file-button-label"), compassButton: $("compass-button"),
   errorCard: $("error-card"), errorMessage: $("error-message"), accuracy: $("accuracy"),
-  heading: $("heading"), installHint: $("install-hint"),
+  heading: $("heading"), installHint: $("install-hint"), trackView: $("track-view"),
+  trackPaths: $("track-paths"), accuracyCircle: $("accuracy-circle"), nearestMarker: $("nearest-marker"),
 };
 
 const radians = (degrees) => degrees * Math.PI / 180;
@@ -131,6 +136,48 @@ function showError(message) {
   elements.errorCard.hidden = !message;
 }
 
+function headingUpPoint(vector, heading, scale) {
+  const angle = radians(heading || 0);
+  const right = vector.x * Math.cos(angle) - vector.y * Math.sin(angle);
+  const forward = vector.x * Math.sin(angle) + vector.y * Math.cos(angle);
+  return {
+    x: TRACK_CENTER + right * scale,
+    y: TRACK_CENTER - forward * scale,
+  };
+}
+
+function renderTrackView(nearest) {
+  const ready = Boolean(state.track && state.position && nearest);
+  elements.trackView.classList.toggle("visible", ready);
+  elements.trackPaths.replaceChildren();
+  elements.nearestMarker.hidden = true;
+  elements.accuracyCircle.setAttribute("r", "0");
+  if (!ready) return;
+
+  const accuracy = Number.isFinite(state.accuracy) ? state.accuracy : 0;
+  const viewRadiusMetres = Math.max(75, Math.min(20000, nearest.distance * 1.35 + 40, Math.max(nearest.distance * 1.35 + 40, accuracy * 2.5, 120)));
+  const scale = TRACK_RADIUS / viewRadiusMetres;
+  const heading = state.heading || 0;
+
+  for (const segment of state.track.segments) {
+    if (!segment.length) continue;
+    const path = document.createElementNS(SVG_NS, "path");
+    const commands = segment.map((point, index) => {
+      const projected = headingUpPoint(localVector(state.position, point), heading, scale);
+      return `${index === 0 ? "M" : "L"}${projected.x.toFixed(2)} ${projected.y.toFixed(2)}`;
+    });
+    path.setAttribute("d", commands.join(" "));
+    path.setAttribute("class", "local-track-path");
+    elements.trackPaths.appendChild(path);
+  }
+
+  const marker = headingUpPoint(localVector(state.position, nearest.coordinate), heading, scale);
+  elements.nearestMarker.setAttribute("cx", marker.x.toFixed(2));
+  elements.nearestMarker.setAttribute("cy", marker.y.toFixed(2));
+  elements.nearestMarker.hidden = false;
+  elements.accuracyCircle.setAttribute("r", Math.min(TRACK_RADIUS, accuracy * scale).toFixed(2));
+}
+
 function render() {
   elements.sensorDot.classList.toggle("ready", Boolean(state.position));
   elements.sensorDot.setAttribute("aria-label", state.position ? "GPS active" : "GPS waiting");
@@ -145,6 +192,7 @@ function render() {
 
   const nearest = state.track && state.position ? nearestPointOnTrack(state.position, state.track.segments) : null;
   const isOnPath = Boolean(nearest && nearest.distance < 3);
+  renderTrackView(nearest);
   elements.needle.classList.toggle("visible", Boolean(nearest) && !isOnPath);
   elements.needle.style.transform = `rotate(${normalizeRotation((nearest ? nearest.bearing : 0) - (state.heading || 0))}deg)`;
   elements.arrived.hidden = !isOnPath;
